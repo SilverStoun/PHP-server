@@ -3,4 +3,22 @@
 
 declare(strict_types=1);
 
-echo 'Hello World!';
+require 'vendor/autoload.php';
+
+use App\Http\Request;
+use App\Http\Response;
+use App\Server;
+
+array_shift($argv);
+
+$port = array_shift($argv) ?? 80;
+$host = '0.0.0.0';
+
+$server = new Server($host, $port);
+echo "Server was created, host - $host | port - $port" . PHP_EOL;
+
+$server->listen(function (Request $request) {
+    echo $request->getMethod() . ' ' . $request->getUri() . PHP_EOL;
+
+    return new Response('Hello');
+});
